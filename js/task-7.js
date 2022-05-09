@@ -42,6 +42,8 @@
 // console.log('0' === false);
 
 // console.log('Papaya' < 'papaya');
+// console.log('P'.charCodeAt(0));
+// console.log('p'.charCodeAt(0));
 
 // console.log('Papaya' === 'papaya');
 

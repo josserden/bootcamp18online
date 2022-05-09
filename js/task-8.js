@@ -1,6 +1,6 @@
 // todo Example 8 - Логічні оператори
 
-// console.log(true && 3);
+// console.log(true && 3 && 2);
 
 // console.log(false && 3);
 
@@ -28,10 +28,10 @@
 
 // Number(a);
 
-// const b = +a;
+// const b = a;
 
 // console.log(typeof a);
 // console.log(a);
 
-console.log(typeof null);
+// console.log(typeof null);
 // console.log(typeof b);
