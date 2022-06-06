@@ -1,18 +1,27 @@
-function convertMs(ms) {
-  // Кількість мілісекунд в одиницю часу
-  const second = 1000;
-  const minute = second * 60;
-  const hour = minute * 60;
-  const day = hour * 24;
+import { getRefs } from './getRefs';
+const { inputDate, timer } = getRefs();
+import { convertMs } from './helpers/convertMs';
 
-  // Залишок днів
-  const days = Math.floor(ms / day);
-  // Залишок годин
-  const hours = Math.floor((ms % day) / hour);
-  // Залишок хвилин
-  const minutes = Math.floor(((ms % day) % hour) / minute);
-  // Залишок секунд
-  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+let timerId = null;
 
-  return { days, hours, minutes, seconds };
+inputDate.addEventListener('change', event => {
+  const { value } = event.target;
+  const birthDay = new Date(value);
+
+  timerId = setInterval(() => renderTime(birthDay), 1000);
+});
+
+function renderTime(date) {
+  const currentDate = new Date();
+  const difference = currentDate - date;
+  const { days, hours, minutes, seconds } = convertMs(difference);
+
+  if (difference < 0) {
+    timer.textContent = `❌ Дата не може бути в майбутньому`;
+
+    clearInterval(timerId);
+    return;
+  }
+
+  timer.textContent = `🎂 ${days} днів ${hours} годин ${minutes} хвилин ${seconds} секунд`;
 }
