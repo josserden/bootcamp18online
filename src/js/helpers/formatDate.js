@@ -1,5 +1,5 @@
-import { format } from 'date-fns';
+import { formatDistance } from 'date-fns';
 
 export const formatDate = date => {
-  return format(new Date(date), 'dd-MM-yyyy');
+  return formatDistance(new Date(date), new Date(), { addSuffix: true });
 };

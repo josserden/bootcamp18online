@@ -1,26 +1,5 @@
-import { fetchUser } from './js/service/fetchUser';
-import { renderUser } from './js/template/renderUser';
+import 'material-icons/iconfont/material-icons.css';
 
-const searchForm = document.querySelector('.js-search-form');
-const profileContainer = document.querySelector('.js-profile-container');
+const BASE_URL = 'https://624dade777abd9e37c7c8930.mockapi.io/';
 
-const searchUser = event => {
-  event.preventDefault();
-
-  const { query } = event.currentTarget.elements;
-  const inputValue = query.value.trim();
-
-  if (inputValue === '') {
-    return alert('Запит не може бути пустим ');
-  }
-
-  fetchUser(inputValue)
-    .then(user => {
-      renderUser(user, profileContainer);
-    })
-    .catch(error => console.error(error));
-
-  event.currentTarget.reset();
-};
-
-searchForm.addEventListener('submit', searchUser);
+const getComments = params => {};
