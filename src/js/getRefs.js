@@ -3,5 +3,6 @@ export const getRefs = () => {
     commentContainer: document.querySelector('.comments-container'),
     loadMoreBtn: document.querySelector('.load-more-btn'),
     backToTopBtn: document.querySelector('.back-to-top'),
+    loader: document.querySelector('.js-loader'),
   };
 };

@@ -6,7 +6,13 @@ const totalPages = Math.ceil(totalComments / limit);
 let page = 1;
 
 export const getComments = () => {
-  return fetch(`${BASE_URL}/comments?page=${page}&limit=${limit}`)
+  const options = new URLSearchParams({
+    page,
+    limit,
+  });
+  const url = `${BASE_URL}/comments?${options}`;
+
+  return fetch(url)
     .then(response => {
       if (!response.ok) {
         throw new Error(response.statusText);
