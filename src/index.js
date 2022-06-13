@@ -1,52 +1,50 @@
 import 'material-icons/iconfont/material-icons.css';
-import throttle from 'lodash.throttle';
 
-import * as CommentsApi from './js/services/CommentsApi';
-import { BackToTopBtn } from './js/services/BackToTopBtn';
-import { renderMarkup } from './js/template/renderMarkup';
-import { getRefs } from './js/getRefs';
-const { loader } = getRefs();
+import * as ContactsService from './js/service/contact.service';
 
-const backToTopBtn = new BackToTopBtn({
-  selector: '.back-to-top',
-  className: 'd-none',
-});
+// GET -> /contacts
+// ContactsService.fetchContacts()
+//   .then(contacts => console.log(contacts))
+//   .catch(error => console.error(error.message));
 
-const handleScroll = () => {
-  if (window.scrollY > window.innerHeight) {
-    backToTopBtn.show();
-  } else {
-    backToTopBtn.hide();
-  }
-};
+// GET -> /contacts/:id
+// ContactsService.getContact(1)
+// .then(contact => console.log(contact))
+// .catch(error => console.error(error.message));
 
-window.addEventListener('scroll', throttle(handleScroll, 800));
+// POST -> /contacts
+// const newContact = {
+//   name: 'Ellie',
+//   email: 'Ellie@mail.com',
+//   number: '655-496-6787',
+// };
 
-document.addEventListener('DOMContentLoaded', () => {
-  backToTopBtn.init();
+// ContactsService.createContact(newContact)
+// .then(contact => console.log(contact))
+// .catch(error => console.error(error.message));
 
-  const options = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.5,
-  };
+// PUT -> /contacts/:id
+// const updatedContact = {
+//   name: 'Kylie Miller',
+// };
 
-  function handleIntersecting(entries, observer) {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        CommentsApi.getComments().then(({ comments, hasNextPage }) => {
-          if (hasNextPage) {
-            observer.unobserve(entry.target);
-            // observer.disconnect(loader);
+// ContactsService.updateContact(10, updatedContact)
+// .then(contact => console.log(contact))
+// .catch(error => console.error(error.message));
 
-            loader.textContent = 'No more comments...';
-          }
-          renderMarkup(comments);
-        });
-      }
-    });
-  }
+// DELETE /contacts/:id
 
-  const infiniteScroll = new IntersectionObserver(handleIntersecting, options);
-  infiniteScroll.observe(loader);
-});
+// ContactsService.removeContact(9)
+//   .then(contact => console.log(contact))
+//   .catch(error => console.error(error.message));
+
+// const arrId = [9, 10, 11];
+// const promises = arrId.map(id => removeContact(id));
+
+// Promise.all(promises)
+//   .then(data => data.forEach(res => console.log(res)))
+//   .catch(err => console.error(err));
+
+// Promise.all([ContactsService.removeContact(7), ContactsService.removeContact(8)])
+//   .then(data => data.forEach(res => console.log(res)))
+//   .catch(err => console.error(err));
