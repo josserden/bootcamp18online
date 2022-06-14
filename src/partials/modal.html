@@ -1,0 +1,93 @@
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content p-4 shadow">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bolder" id="exampleModalLabel">
+          Add contact
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body text-center">
+        <form class="inline-form js-modal-form">
+          <div class="m-0 mb-3">
+            <label class="form-label d-block">
+              <span class="d-block mb-2 text-start fw-bolder">Name</span>
+              <div class="input-group mb-3 shadow-sm">
+                <span class="input-group-text" id="basic-addon3">
+                  <span class="material-icons-round"> person </span>
+                </span>
+                <input
+                  type="text"
+                  name="name"
+                  class="form-control"
+                  placeholder="Forrest Best"
+                  aria-label="name"
+                  aria-describedby="basic-addon1"
+                  required
+                />
+              </div>
+            </label>
+          </div>
+          <div class="m-0 mb-3">
+            <label class="form-label d-block">
+              <span class="d-block mb-2 text-start fw-bolder">Email</span>
+              <div class="input-group mb-3 shadow-sm">
+                <span class="input-group-text" id="basic-addon1">
+                  <span class="material-icons-round"> alternate_email </span>
+                </span>
+                <input
+                  type="email"
+                  name="email"
+                  class="form-control"
+                  placeholder="name@example.com"
+                  aria-label="email"
+                  aria-describedby="basic-addon1"
+                  required
+                />
+              </div>
+            </label>
+          </div>
+          <div class="m-0 mb-3">
+            <label class="form-label d-block">
+              <span class="d-block mb-2 text-start fw-bolder">Number</span>
+              <div class="input-group mb-3 shadow-sm">
+                <span class="input-group-text" id="basic-addon2">
+                  <span class="material-icons-round"> phone </span>
+                </span>
+                <input
+                  type="tel"
+                  name="number"
+                  class="form-control"
+                  placeholder="+1 (105) 106-3145"
+                  aria-label="number"
+                  aria-describedby="basic-addon1"
+                  required
+                />
+              </div>
+            </label>
+          </div>
+
+          <div class="mt-4 mx-auto">
+            <button
+              type="submit"
+              class="btn btn-secondary d-inline-flex align-items-center gap-2 px-4 py-2 shadow-sm"
+            >
+              Create <span class="material-icons"> send </span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

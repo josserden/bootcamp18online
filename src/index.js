@@ -1,50 +1,82 @@
+// Imports
 import 'material-icons/iconfont/material-icons.css';
 
-import * as ContactsService from './js/service/contact.service';
+import * as ContactsService from './js/service/contacts-service';
+import { renderMarkup } from './js/template/renderMarkup';
+import { getRefs } from './js/getRefs';
 
-// GET -> /contacts
-// ContactsService.fetchContacts()
-//   .then(contacts => console.log(contacts))
-//   .catch(error => console.error(error.message));
+const { form, modal, contactsContainer, searchForm } = getRefs();
 
-// GET -> /contacts/:id
-// ContactsService.getContact(1)
-// .then(contact => console.log(contact))
-// .catch(error => console.error(error.message));
+// Functions
+const getContacts = async () => {
+  try {
+    const contacts = await ContactsService.fetchContacts();
 
-// POST -> /contacts
-// const newContact = {
-//   name: 'Ellie',
-//   email: 'Ellie@mail.com',
-//   number: '655-496-6787',
-// };
+    renderMarkup(contacts);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
-// ContactsService.createContact(newContact)
-// .then(contact => console.log(contact))
-// .catch(error => console.error(error.message));
+const handleSubmit = async event => {
+  event.preventDefault();
 
-// PUT -> /contacts/:id
-// const updatedContact = {
-//   name: 'Kylie Miller',
-// };
+  const formData = new FormData(form);
 
-// ContactsService.updateContact(10, updatedContact)
-// .then(contact => console.log(contact))
-// .catch(error => console.error(error.message));
+  const name = formData.get('name');
+  const number = formData.get('number');
+  const email = formData.get('email');
 
-// DELETE /contacts/:id
+  try {
+    await ContactsService.createContact({ name, number, email });
 
-// ContactsService.removeContact(9)
-//   .then(contact => console.log(contact))
-//   .catch(error => console.error(error.message));
+    form.reset();
+    modal.hide(); // метод з bootstrap
+  } catch (error) {
+    console.error(error);
+  }
+};
 
-// const arrId = [9, 10, 11];
-// const promises = arrId.map(id => removeContact(id));
+const handleDeleteContact = async event => {
+  const id = event.target.dataset.id;
 
-// Promise.all(promises)
-//   .then(data => data.forEach(res => console.log(res)))
-//   .catch(err => console.error(err));
+  if (!id) return;
 
-// Promise.all([ContactsService.removeContact(7), ContactsService.removeContact(8)])
-//   .then(data => data.forEach(res => console.log(res)))
-//   .catch(err => console.error(err));
+  try {
+    await ContactsService.removeContact(id);
+    await getContacts();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+// Listeners
+document.addEventListener('DOMContentLoaded', getContacts);
+form.addEventListener('submit', handleSubmit);
+contactsContainer.addEventListener('click', handleDeleteContact);
+
+// Trash
+searchForm.addEventListener('input', event => {
+  const searchValue = event.target.value.trim().toLowerCase();
+  const contacts = document.querySelectorAll('.js-card');
+
+  const filteredContacts = [...contacts].filter(contact => {
+    const name = contact.querySelector('.js-name').textContent.toLowerCase();
+    const number = contact
+      .querySelector('.js-number')
+      .textContent.toLowerCase();
+    const email = contact.querySelector('.js-email').textContent.toLowerCase();
+
+    return (
+      name.includes(searchValue) ||
+      number.includes(searchValue) ||
+      email.includes(searchValue)
+    );
+  });
+
+  contactsContainer.innerHTML = '';
+
+  filteredContacts.forEach(contact => {
+    contactsContainer.appendChild(contact);
+  });
+});
