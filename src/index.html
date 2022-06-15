@@ -1,32 +1,25 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Module-11-1</title>
+    <title>Pexels API</title>
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
-      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="./sass/index.scss" />
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-      crossorigin="anonymous"
-    ></script>
     <script type="module" src="./index.js"></script>
   </head>
-  <body style="background: linear-gradient(to right, #b2bfc2, #e6e7db)">
-    <!-- Так добавляются фрагменты в главные HTML-файлы страниц. -->
+  <body>
+    <include src="./partials/navbar.html"></include>
 
-    <include src="./partials/header.html"></include>
-
-    <section class="pt-5 pb-5">
-      <include src="./partials/card.html"></include>
+    <section class="py-5">
+      <include src="./partials/gallery.html"></include>
+      <include src="./partials/spinner.html"></include>
+      <include src="./partials/pagination.html"></include>
     </section>
-
-    <include src="./partials/modal.html"></include>
   </body>
 </html>

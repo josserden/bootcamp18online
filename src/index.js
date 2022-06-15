@@ -1,82 +1,84 @@
-// Imports
+// Import
 import 'material-icons/iconfont/material-icons.css';
+import Pagination from 'tui-pagination';
+import 'tui-pagination/dist/tui-pagination.min.css';
 
-import * as ContactsService from './js/service/contacts-service';
-import { renderMarkup } from './js/template/renderMarkup';
-import { getRefs } from './js/getRefs';
+import { ImageService } from './js/service/api-service';
+import { getRefs } from './js/getRefs.js';
+import { renderGallery } from './js/template/renderGallery';
+import { PER_PAGE } from './js/constants';
+import { VisibleComponent } from './js/components/VisibleComponent';
 
-const { form, modal, contactsContainer, searchForm } = getRefs();
+const { searchBar, paginationRef, galleryContainer } = getRefs();
+
+// Ініціалізація пагінації та базові налаштування
+const pagination = new Pagination(paginationRef, {
+  totalItems: 0,
+  itemsPerPage: PER_PAGE,
+  visiblePages: 5,
+});
+
+const paginationWrapper = new VisibleComponent({
+  selector: '.pagination-wrapper',
+  className: 'd-none',
+  isHide: true,
+});
+
+const spinner = new VisibleComponent({
+  selector: '.js-spinner',
+  className: 'd-none',
+  isHide: true,
+});
 
 // Functions
-const getContacts = async () => {
-  try {
-    const contacts = await ContactsService.fetchContacts();
-
-    renderMarkup(contacts);
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const handleSubmit = async event => {
+const onHandleSearch = async event => {
   event.preventDefault();
 
-  const formData = new FormData(form);
+  const searchQuery = event.target.elements.query.value.trim();
 
-  const name = formData.get('name');
-  const number = formData.get('number');
-  const email = formData.get('email');
+  if (!searchQuery) return;
 
   try {
-    await ContactsService.createContact({ name, number, email });
+    ImageService.query = searchQuery; // Записуємо значення пошуку в об'єкт ImageService
+    spinner.show();
+    const { photos, total_results } = await ImageService.getImages();
 
-    form.reset();
-    modal.hide(); // метод з bootstrap
+    if (total_results === 0) {
+      paginationWrapper.hide();
+      galleryContainer.innerHTML = `<div class="alert alert-danger">Нічого не знайдено</div>`;
+      spinner.hide();
+      return;
+    }
+
+    paginationWrapper.show(); // Показуємо пагінацію
+
+    pagination.reset(total_results); // Оновлення значення totalItem в пагінації
+
+    document.title = `${searchQuery} - ${total_results} results`;
+    renderGallery(photos);
+    spinner.hide();
+
+    searchBar.reset();
   } catch (error) {
     console.error(error);
   }
 };
 
-const handleDeleteContact = async event => {
-  const id = event.target.dataset.id;
-
-  if (!id) return;
-
+const moviePagination = async event => {
   try {
-    await ContactsService.removeContact(id);
-    await getContacts();
+    ImageService.page = event.page; // Оновлення значення page в обʼєкті ImageService
+    galleryContainer.innerHTML = '';
+    spinner.show();
+
+    const { photos } = await ImageService.getImages();
+    renderGallery(photos);
+    spinner.hide();
   } catch (error) {
     console.error(error);
   }
 };
 
-// Listeners
-document.addEventListener('DOMContentLoaded', getContacts);
-form.addEventListener('submit', handleSubmit);
-contactsContainer.addEventListener('click', handleDeleteContact);
-
-// Trash
-searchForm.addEventListener('input', event => {
-  const searchValue = event.target.value.trim().toLowerCase();
-  const contacts = document.querySelectorAll('.js-card');
-
-  const filteredContacts = [...contacts].filter(contact => {
-    const name = contact.querySelector('.js-name').textContent.toLowerCase();
-    const number = contact
-      .querySelector('.js-number')
-      .textContent.toLowerCase();
-    const email = contact.querySelector('.js-email').textContent.toLowerCase();
-
-    return (
-      name.includes(searchValue) ||
-      number.includes(searchValue) ||
-      email.includes(searchValue)
-    );
-  });
-
-  contactsContainer.innerHTML = '';
-
-  filteredContacts.forEach(contact => {
-    contactsContainer.appendChild(contact);
-  });
-});
+//Listeners
+searchBar.addEventListener('submit', onHandleSearch);
+//Кастомний лістенер для пагінації
+pagination.on('afterMove', moviePagination);
